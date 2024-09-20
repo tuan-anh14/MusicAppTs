@@ -1,16 +1,9 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 
-import Topic from "../../models/topic.model";
+import * as controller from "../../controllers/client/topic.controller";
 
 const router: Router = Router();
 
-router.get("/topics", async (req: Request, res: Response) => {
-  const topics = await Topic.find({
-    deleted: false,
-  });
-
-  console.log(topics);
-  res.render("client/pages/topics/index.pug");
-});
+router.get("/topics", controller.topics);
 
 export const topicRoutes: Router = router;
