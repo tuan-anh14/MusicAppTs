@@ -55,3 +55,40 @@ export const list = async (req: Request, res: Response) => {
     res.status(500).send("An error occurred while fetching the songs.");
   }
 };
+
+// [GET] /songs/detail/:slugSong
+export const detail = async (req: Request, res: Response) => {
+  try {
+    const slugSong: string = req.params.slugSong;
+
+    const song = await Song.findOne({
+      slug: slugSong,
+      status: "active",
+      deleted: false,
+    });
+
+    const singer = await Singer.findOne({
+      _id: song?.singerId,
+      deleted: false,
+    }).select("fullName");
+
+    const topic = await Topic.findOne({
+      _id: song?.topicId,
+      deleted: false,
+    }).select("title");
+
+    console.log(song);
+    console.log(singer);
+    console.log(topic);
+
+    res.render("client/pages/songs/detail.pug", {
+      pageTitle: "Chi tiết bài hát",
+      song: song,
+      singer: singer,
+      topic: topic
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("An error occurred while fetching the songs.");
+  }
+};
