@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Topic from "../../models/topic.model";
 import Song from "../../models/song.model";
 import Singer from "../../models/singer.model";
+import FavoriteSong from "../../models/favorite-song.model";
 
 // [GET] /songs/:slugTopic
 export const list = async (req: Request, res: Response) => {
@@ -63,15 +64,26 @@ export const detail = async (req: Request, res: Response) => {
       deleted: false,
     });
 
+    if (!song) {
+      return res.status(404).send("Bài hát không tìm thấy");
+    }
+
     const singer = await Singer.findOne({
-      _id: song?.singerId,
+      _id: song.singerId,
       deleted: false,
     }).select("fullName");
 
     const topic = await Topic.findOne({
-      _id: song?.topicId,
+      _id: song.topicId,
       deleted: false,
     }).select("title");
+
+    const favoriteSong = await FavoriteSong.findOne({
+      // userId: ""
+      songId: song.id,
+    });
+
+    (song as any).isFavoriteSong = favoriteSong ? true : false;
 
     res.render("client/pages/songs/detail.pug", {
       pageTitle: "Chi tiết bài hát",
@@ -81,7 +93,7 @@ export const detail = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).send("An error occurred while fetching the songs.");
+    res.status(500).send("Đã xảy ra lỗi trong quá trình lấy bài hát.");
   }
 };
 
@@ -121,6 +133,50 @@ export const like = async (req: Request, res: Response) => {
         message: "Không tìm thấy bài hát.",
       });
     }
+  } catch (error) {
+    return res.status(500).json({
+      code: 500,
+      message: "Lỗi máy chủ.",
+    });
+  }
+};
+
+// [PATCH] /songs/favorite/:typeFavorite/:idSong
+export const favorite = async (req: Request, res: Response) => {
+  try {
+    const idSong: string = req.params.idSong;
+    const typeFavorite: string = req.params.typeFavorite;
+
+    switch (typeFavorite) {
+      case "favorite":
+        const exitsFavoriteSong = await FavoriteSong.findOne({
+          songId: idSong,
+        });
+        if (!exitsFavoriteSong) {
+          const record = new FavoriteSong({
+            // userId: "",
+            songId: idSong,
+          });
+
+          await record.save();
+        }
+        break;
+
+      case "unfavorite":
+        await FavoriteSong.deleteOne({
+          songId: idSong,
+        });
+
+        break;
+
+      default:
+        break;
+    }
+
+    res.json({
+      code: 200,
+      message: "Thành công!",
+    });
   } catch (error) {
     return res.status(500).json({
       code: 500,

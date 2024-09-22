@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const favouriteSongSchema = new mongoose.Schema(
+const favoriteSongSchema = new mongoose.Schema(
   {
     userId: String,
     songId: String,
@@ -15,10 +15,10 @@ const favouriteSongSchema = new mongoose.Schema(
   }
 );
 
-const FavouriteSong = mongoose.model(
-  "FavouriteSong",
-  favouriteSongSchema,
-  "favourite-songs"
+const FavoriteSong = mongoose.model(
+  "FavoriteSong",
+  favoriteSongSchema,
+  "favorite-songs"
 );
 
-export default FavouriteSong;
+export default FavoriteSong;
