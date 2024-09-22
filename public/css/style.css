@@ -156,20 +156,29 @@ h1 {
   color: #555; 
 }
 
-.singer-detail .inner-actions .inner-like i {
-  color: blue;
+.singer-detail .inner-actions .inner-like{
+  cursor: pointer;
 }
 
-.singer-detail .inner-actions .inner-like {
+.singer-detail .inner-actions .inner-like i{
   color: blue; 
 }
 
-.singer-detail .inner-actions .inner-heart i {
-  color: red;
+.singer-detail .inner-actions .inner-like.active{
+  color: blue; 
 }
 
-.singer-detail .inner-actions .inner-heart {
-  color: red; 
+.singer-detail .inner-actions .inner-like.active i{
+  font-weight: 700;
+}
+
+.singer-detail .inner-actions .inner-heart{
+  cursor: pointer;
+}
+
+
+.singer-detail .inner-actions .inner-heart i {
+  color: red;
 }
 
 .singer-detail .inner-play {
@@ -190,7 +199,7 @@ h1 {
   animation-duration: 12s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
-  /* animation-play-state: paused; */
+  animation-play-state: paused;
 }
 
 @keyframes spin {
