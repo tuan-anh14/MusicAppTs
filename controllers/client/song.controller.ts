@@ -184,3 +184,45 @@ export const favorite = async (req: Request, res: Response) => {
     });
   }
 };
+
+// [PATCH] /songs/listen/:idSong
+// [PATCH] /songs/listen/:idSong
+export const listen = async (req: Request, res: Response) => {
+  try {
+      const idSong: string = req.params.idSong;
+
+      const song = await Song.findOne({
+          _id: idSong
+      });
+
+      if (!song) {
+          return res.status(404).json({
+              code: 404,
+              message: "Bài hát không tồn tại."
+          });
+      }
+
+      const listen: number = song.listen + 1;
+
+      await Song.updateOne({
+          _id: idSong
+      }, {
+          listen: listen
+      });
+
+      const songNew = await Song.findOne({
+          _id: idSong
+      });
+
+      res.json({
+          code: 200,
+          message: "Thành công!",
+          listen: songNew?.listen
+      });
+  } catch (error) {
+      return res.status(500).json({
+          code: 500,
+          message: "Lỗi máy chủ."
+      });
+  }
+};
