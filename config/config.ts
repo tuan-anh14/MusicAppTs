@@ -1,5 +1,5 @@
-const PREFIX_ADMIN: string = "admin";
+const PATH_ADMIN: string = "admin";
 
 export const systemConfig = {
-  prefixAdmin: PREFIX_ADMIN,
+  prefixAdmin: PATH_ADMIN,
 };
