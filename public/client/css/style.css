@@ -272,6 +272,7 @@ h1 {
   padding: 10px 15px;
   color: #333;
   line-height: 1.6;
+  white-space: pre;
 }
 
 /* Responsive adjustments */
