@@ -1,6 +1,7 @@
 import express, { Express } from "express";
 import * as database from "./config/database";
 import dotenv from "dotenv";
+import methodOverride from "method-override";
 
 import adminRoutes from "./routes/admin/index.route";
 import clientRoutes from "./routes/client/index.route";
@@ -17,6 +18,8 @@ const port: number | string = process.env.PORT || 3000;
 
 app.use(express.json());
 // app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(methodOverride("_method"));
 
 app.use(express.static("public"));
 
